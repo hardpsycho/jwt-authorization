@@ -1,0 +1,59 @@
+{
+  "name": "webpack-start",
+  "version": "1.0.0",
+  "description": "Starting webpack bundle",
+  "main": "index.js",
+  "scripts": {
+    "build": "NODE_ENV=production webpack --config config/webpack.config.js",
+    "build-dev": "NODE_ENV=development webpack --config config/webpack.config.js",
+    "start": "NODE_ENV=development  webpack serve --config config/webpack.config.js"
+  },
+  "keywords": [],
+  "author": "Hard Psycho",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.2",
+    "@testing-library/jest-dom": "^5.15.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.5.1",
+    "favicons": "^6.2.2",
+    "favicons-webpack-plugin": "^5.0.2",
+    "html-loader": "^3.0.1",
+    "html-webpack-plugin": "^5.5.0",
+    "jest": "^27.3.1",
+    "mini-css-extract-plugin": "^2.4.5",
+    "postcss": "^8.4.1",
+    "postcss-loader": "^6.2.0",
+    "postcss-preset-env": "^7.0.1",
+    "react-refresh": "^0.11.0",
+    "sass": "^1.43.5",
+    "sass-loader": "^12.3.0",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "transform": {
+      ".jsx?$": [
+        "babel-jest",
+        {
+          "configFile": "./config/babel.config.js"
+        }
+      ]
+    },
+    "setupFilesAfterEnv": [
+      "./config/jest-setup.js"
+    ]
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
