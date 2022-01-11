@@ -14,13 +14,11 @@ class UserService {
 
         const hashPassword = await bcrypt.hash(password, 3)
         const activationLink = uuid.v4()
-        const user = await UserModel.create({email, password: hashPassword, activationLink})
-        await mailService.sendActivationLink(email, activationLink)
+        const user = await UserModel.create({email, password: hashPassword, activationLink: `http://localhost:3000/api/activate/${activationLink}` })
+        await mailService.sendActivationLink(email, `http://localhost:3000/api/activate/${activationLink}`)
 
         const userDto = new UserDto(user)
-        console.log(userDto);
         const tokens = tokenService.generateTokens({...userDto})
-        console.log(tokens);
 
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
 
