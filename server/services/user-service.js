@@ -14,8 +14,8 @@ class UserService {
 
         const hashPassword = await bcrypt.hash(password, 3)
         const activationLink = uuid.v4()
-        const user = await UserModel.create({email, password: hashPassword, activationLink: `http://localhost:3000/api/activate/${activationLink}` })
-        await mailService.sendActivationLink(email, `http://localhost:3000/api/activate/${activationLink}`)
+        const user = await UserModel.create({email, password: hashPassword, activationLink })
+        await mailService.sendActivationLink(email, `${process.env.API_URL}/api/activate/${activationLink}`)
 
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
@@ -26,6 +26,15 @@ class UserService {
             ...tokens,
             user: userDto
         }
+    }
+
+    activate = async (activationLink) => {
+        const user = await UserModel.findOne({activationLink})
+        if(!user){
+            throw new Error("Неверная ссылка активации")
+        }
+        user.activated = true
+        user.save()
     }
 }
 
