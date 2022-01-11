@@ -37,6 +37,26 @@ class UserService {
         user.activated = true
         user.save()
     }
+
+    login = async  (email, password) => {
+        const user = await UserModel.findOne({email})
+        if (!user){
+            throw ApiError.badRequest(`Пользователь не найден`)
+        }
+
+        const isPasswordsEquals = await bcrypt.compare(password, user.password)
+        if(!isPasswordsEquals){
+            throw ApiError.badRequest(`Пароль не верен`)
+        }
+
+        const userDto = new UserDto(user)
+        const tokens = tokenService.generateTokens({...userDto})
+
+        return {
+            ...tokens,
+            user: userDto
+        }
+    }
 }
 
 module.exports = new UserService()
