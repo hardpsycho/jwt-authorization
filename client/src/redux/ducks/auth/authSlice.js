@@ -1,9 +1,11 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import AuthService from "../../../services/AuthService";
+import axios from "axios";
 
 let initState = {
     user: {},
-    isAuth: false
+    isAuth: false,
+    isLoading: false
 }
 
 export const registration = createAsyncThunk(
@@ -33,7 +35,7 @@ export const login = createAsyncThunk(
             dispatch(setUser(response.data.user))
             dispatch(setIsAuth(true))
         } catch (e) {
-            console.log(e);
+            console.log(e.response?.data?.message);
         }
     }
 )
@@ -47,11 +49,25 @@ export const logout = createAsyncThunk(
             dispatch(setUser({}))
             dispatch(setIsAuth(false))
         } catch (e) {
-            console.log(e);
+            console.log(e.response?.data?.message);
         }
     }
 )
 
+export const checkAuth = createAsyncThunk(
+    "jwt/checkAuth",
+    async (undefined, {dispatch}) => {
+        try {
+            const response = await axios.get("http://localhost:5000/api/refresh", {withCredentials: true})
+            console.log(response.data);
+            localStorage.setItem("token", response.data.userToken)
+            dispatch(setUser(response.data.user))
+            dispatch(setIsAuth(true))
+        } catch (e) {
+            console.log(e.response?.data?.message);
+        }
+    }
+)
 
 const authSlice = createSlice({
     name: "auth",
@@ -67,7 +83,12 @@ const authSlice = createSlice({
     },
 
     extraReducers: {
-
+        [checkAuth.pending] : state => {
+            state.isLoading = true
+        },
+        [checkAuth.fulfilled] : state => {
+            state.isLoading = false
+        }
     }
 })
 

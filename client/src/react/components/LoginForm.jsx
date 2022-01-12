@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {login, registration} from "../../redux/ducks/auth/authSlice";
+import {login, registration, logout} from "../../redux/ducks/auth/authSlice";
 import {useDispatch} from "react-redux";
 
 const LoginForm = () => {
@@ -16,6 +16,11 @@ const LoginForm = () => {
     const clickRegistration = (e) => {
         e.preventDefault()
         dispatch(registration({email, password}))
+    }
+
+    const clickLogout= (e) => {
+        e.preventDefault()
+        dispatch(logout())
     }
 
     return (
@@ -43,6 +48,11 @@ const LoginForm = () => {
                 onClick={clickRegistration}
             >
                 Регистрация
+            </button>
+            <button
+                onClick={clickLogout}
+            >
+                выйти
             </button>
         </form>
     );
