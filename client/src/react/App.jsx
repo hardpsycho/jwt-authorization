@@ -2,6 +2,7 @@ import LoginForm from "./components/LoginForm";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {checkAuth} from "../redux/ducks/auth/authSlice";
+import {fetchUsers} from "../redux/ducks/users/usersSlice";
 
 const App = () => {
 
@@ -9,6 +10,8 @@ const App = () => {
     const isAuth = useSelector(state => state.authState.isAuth)
     const userEmail = useSelector(state => state.authState.user.email)
     const isLoading = useSelector(state => state.authState.isLoading)
+    const users = useSelector(state => state.usersState.users)
+    const usersIsLoading = useSelector(state => state.usersState.isLoading)
 
     useEffect(() => {
         if(localStorage.getItem("token")){
@@ -16,6 +19,10 @@ const App = () => {
             dispatch(checkAuth())
         }
     }, [])
+
+    const clickFetchUsers = () => {
+        dispatch(fetchUsers())
+    }
 
     if(isLoading) {
         return <div>Загрузочка...</div>
@@ -25,6 +32,10 @@ const App = () => {
         <>
             <h1>{isAuth ? `Вы зашли как ${userEmail}` : "Войдите или будете уничтожены"}</h1>
             <LoginForm />
+            {isAuth ? <button onClick={clickFetchUsers}>Получить пользователей</button> : ""}
+            {users ? users.map(user => {
+                return <div key={user._id}>{user.email}</div>
+            }) : ""}
         </>
     );
 };
