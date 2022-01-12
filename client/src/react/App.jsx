@@ -1,10 +1,12 @@
 import LoginForm from "./components/LoginForm";
+import store from "../redux/store"
+import {Provider} from "react-redux";
 
 const App = () => {
     return (
-        <div>
+        <Provider store={store}>
             <LoginForm />
-        </div>
+        </Provider>
     );
 };
 
